@@ -3,47 +3,46 @@ import './App.css';
 
 interface Song {
   id: number;
-  title: string;
+  url: string;
   votes: number;
 }
 
 const SongVotingApp: React.FC = () => {
   const [songs, setSongs] = useState<Song[]>([]);
-  const [newSong, setNewSong] = useState<string>('');
+  const [newUrl, setNewUrl] = useState<string>('');
   const [votedSongIds, setVotedSongIds] = useState<number[]>([]);
 
-  // Load from localStorage on app start
   useEffect(() => {
     const storedVotes = localStorage.getItem('votedSongIds');
     if (storedVotes) {
       setVotedSongIds(JSON.parse(storedVotes));
     }
-
     const storedSongs = localStorage.getItem('songs');
     if (storedSongs) {
       setSongs(JSON.parse(storedSongs));
     }
   }, []);
 
-  // Save votedSongIds to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('votedSongIds', JSON.stringify(votedSongIds));
   }, [votedSongIds]);
 
-  // Save songs to localStorage whenever songs change
   useEffect(() => {
     localStorage.setItem('songs', JSON.stringify(songs));
   }, [songs]);
 
   const addSong = () => {
-    if (newSong.trim() === '') return;
+    if (newUrl.trim() === '') return;
+
+    const formattedUrl = newUrl.startsWith('http') ? newUrl : `https://${newUrl}`;
+
     const song: Song = {
       id: Date.now(),
-      title: newSong,
+      url: formattedUrl,
       votes: 0,
     };
     setSongs(prevSongs => [...prevSongs, song]);
-    setNewSong('');
+    setNewUrl('');
   };
 
   const voteSong = (id: number) => {
@@ -72,10 +71,10 @@ const SongVotingApp: React.FC = () => {
       <div style={{ marginBottom: '20px' }}>
         <input
           type="text"
-          placeholder="Enter a song title"
-          value={newSong}
-          onChange={(e) => setNewSong(e.target.value)}
-          style={{ padding: '8px', width: '250px', marginRight: '10px' }}
+          placeholder="Enter song URL"
+          value={newUrl}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewUrl(e.target.value)}
+          style={{ padding: '8px', width: '400px', marginRight: '10px' }}
         />
         <button
           onClick={addSong}
@@ -87,7 +86,15 @@ const SongVotingApp: React.FC = () => {
       <ul style={{ listStyleType: 'none', padding: 0 }}>
         {songs.map(song => (
           <li key={song.id} style={{ marginBottom: '10px' }}>
-            {song.title} - {song.votes} votes
+            <a
+              href={song.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ marginRight: '10px', textDecoration: 'none', color: 'blue' }}
+            >
+              {song.url}
+            </a>
+            - {song.votes} votes
             <button
               onClick={() => voteSong(song.id)}
               disabled={votedSongIds.includes(song.id)}
