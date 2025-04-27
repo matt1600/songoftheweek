@@ -11,6 +11,8 @@ const SongVotingApp: React.FC = () => {
   const [songs, setSongs] = useState<Song[]>([]);
   const [newUrl, setNewUrl] = useState<string>('');
   const [votedSongIds, setVotedSongIds] = useState<number[]>([]);
+  const [showWinner, setShowWinner] = useState<boolean>(false);
+  const [winner, setWinner] = useState<Song | null>(null);
 
   useEffect(() => {
     const storedVotes = localStorage.getItem('votedSongIds');
@@ -43,6 +45,8 @@ const SongVotingApp: React.FC = () => {
     };
     setSongs(prevSongs => [...prevSongs, song]);
     setNewUrl('');
+    setShowWinner(false);
+    setWinner(null);
   };
 
   const voteSong = (id: number) => {
@@ -62,7 +66,16 @@ const SongVotingApp: React.FC = () => {
       setVotedSongIds([]);
       localStorage.removeItem('songs');
       localStorage.removeItem('votedSongIds');
+      setShowWinner(false);
+      setWinner(null);
     }
+  };
+
+  const revealWinner = () => {
+    if (songs.length === 0) return;
+    const highest = songs.reduce((prev, current) => (prev.votes > current.votes ? prev : current));
+    setWinner(highest);
+    setShowWinner(true);
   };
 
   return (
@@ -83,6 +96,7 @@ const SongVotingApp: React.FC = () => {
           Add Song
         </button>
       </div>
+
       <ul style={{ listStyleType: 'none', padding: 0 }}>
         {songs.map(song => (
           <li key={song.id} style={{ marginBottom: '10px' }}>
@@ -90,11 +104,15 @@ const SongVotingApp: React.FC = () => {
               href={song.url}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ marginRight: '10px', textDecoration: 'none', color: 'blue' }}
+              style={{
+                marginRight: '10px',
+                textDecoration: 'none',
+                color: winner && song.id === winner.id ? 'green' : 'blue', // 🔥 Color winner green
+                fontWeight: winner && song.id === winner.id ? 'bold' : 'normal' // 🔥 Bold winner
+              }}
             >
-              {song.url}
+              {song.url} {winner && song.id === winner.id && '🏆'} {/* 🔥 Add trophy emoji */}
             </a>
-            - {song.votes} votes
             <button
               onClick={() => voteSong(song.id)}
               disabled={votedSongIds.includes(song.id)}
@@ -113,8 +131,23 @@ const SongVotingApp: React.FC = () => {
           </li>
         ))}
       </ul>
+
       {songs.length > 0 && (
         <div style={{ marginTop: '30px' }}>
+          <button
+            onClick={revealWinner}
+            style={{
+              backgroundColor: '#007bff',
+              color: 'white',
+              padding: '10px 20px',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              marginRight: '10px'
+            }}
+          >
+            Reveal Winner
+          </button>
           <button
             onClick={resetApp}
             style={{
@@ -128,6 +161,21 @@ const SongVotingApp: React.FC = () => {
           >
             Reset All
           </button>
+        </div>
+      )}
+
+      {showWinner && winner && (
+        <div style={{ marginTop: '20px' }}>
+          <h2>🏆 Winner:</h2>
+          <a
+            href={winner.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontSize: '18px', textDecoration: 'none', color: 'green' }}
+          >
+            {winner.url}
+          </a>
+          <p style={{ fontWeight: 'bold' }}>{winner.votes} votes</p>
         </div>
       )}
     </div>
