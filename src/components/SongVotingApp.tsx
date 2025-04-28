@@ -1,72 +1,91 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import '../styles/App.css';
 
 interface Song {
-  id: number;
-  url: string;
-  votes: number;
+  submitting_user: string;
+  song_url: string;
 }
 
 const SongVotingApp: React.FC = () => {
   const [songs, setSongs] = useState<Song[]>([]);
   const [newUrl, setNewUrl] = useState<string>('');
-  const [votedSongIds, setVotedSongIds] = useState<number[]>([]);
+  const [votedSongUrls, setVotedSongUrls] = useState<string[]>([]);
   const [showWinner, setShowWinner] = useState<boolean>(false);
   const [winner, setWinner] = useState<Song | null>(null);
+  const pathname = usePathname();
+  const groupId = pathname.split('/').pop();
 
   useEffect(() => {
-    const storedVotes = localStorage.getItem('votedSongIds');
+    fetchSongs();
+
+    const storedVotes = localStorage.getItem('votedSongUrls');
     if (storedVotes) {
-      setVotedSongIds(JSON.parse(storedVotes));
-    }
-    const storedSongs = localStorage.getItem('songs');
-    if (storedSongs) {
-      setSongs(JSON.parse(storedSongs));
+      setVotedSongUrls(JSON.parse(storedVotes));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('votedSongIds', JSON.stringify(votedSongIds));
-  }, [votedSongIds]);
+    localStorage.setItem('votedSongUrls', JSON.stringify(votedSongUrls));
+  }, [votedSongUrls]);
 
-  useEffect(() => {
-    localStorage.setItem('songs', JSON.stringify(songs));
-  }, [songs]);
+  const fetchSongs = async () => {
+    try {
+      const response = await fetch(`/api/songs/${groupId}`);
+      const data = await response.json();
+      if (response.ok) {
+        setSongs(data);
+      } else {
+        console.error('Error fetching songs:', data.error);
+      }
+    } catch (error) {
+      console.error('Error fetching songs:', error);
+    }
+  };
 
-  const addSong = () => {
+  const addSong = async () => {
     if (newUrl.trim() === '') return;
 
     const formattedUrl = newUrl.startsWith('http') ? newUrl : `https://${newUrl}`;
 
-    const song: Song = {
-      id: Date.now(),
-      url: formattedUrl,
-      votes: 0,
-    };
-    setSongs(prevSongs => [...prevSongs, song]);
-    setNewUrl('');
-    setShowWinner(false);
-    setWinner(null);
+    try {
+      const response = await fetch('/api/songs/group1', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          submitting_user: 'Anonymous', // or ask for name if you want
+          song_url: formattedUrl,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setNewUrl('');
+        fetchSongs(); // refresh the song list after adding
+        setShowWinner(false);
+        setWinner(null);
+      } else {
+        console.error('Error adding song:', data.error);
+      }
+    } catch (error) {
+      console.error('Error adding song:', error);
+    }
   };
 
-  const voteSong = (id: number) => {
-    if (votedSongIds.includes(id)) return;
-    setSongs(prevSongs =>
-      prevSongs.map(song =>
-        song.id === id ? { ...song, votes: song.votes + 1 } : song
-      )
-    );
-    setVotedSongIds(prev => [...prev, id]);
+  const voteSong = (url: string) => {
+    if (votedSongUrls.includes(url)) return;
+    setVotedSongUrls(prev => [...prev, url]);
   };
 
   const resetApp = () => {
-    const confirmReset = window.confirm('Are you sure you want to reset all songs and votes?');
+    const confirmReset = window.confirm('Are you sure you want to reset your votes?');
     if (confirmReset) {
-      setSongs([]);
-      setVotedSongIds([]);
-      localStorage.removeItem('songs');
-      localStorage.removeItem('votedSongIds');
+      setVotedSongUrls([]);
+      localStorage.removeItem('votedSongUrls');
       setShowWinner(false);
       setWinner(null);
     }
@@ -74,14 +93,18 @@ const SongVotingApp: React.FC = () => {
 
   const revealWinner = () => {
     if (songs.length === 0) return;
-    const highest = songs.reduce((prev, current) => (prev.votes > current.votes ? prev : current));
-    setWinner(highest);
+
+    const votedSongs = songs.filter(song => votedSongUrls.includes(song.song_url));
+    const randomWinner = votedSongs[Math.floor(Math.random() * votedSongs.length)];
+    setWinner(randomWinner);
     setShowWinner(true);
   };
 
   return (
     <div className="App">
       <h1>Song of the Week 🎵</h1>
+
+      {/* ADD SONG INPUT */}
       <div style={{ marginBottom: '20px' }}>
         <input
           type="text"
@@ -98,41 +121,43 @@ const SongVotingApp: React.FC = () => {
         </button>
       </div>
 
+      {/* SONG LIST */}
       <ul style={{ listStyleType: 'none', padding: 0 }}>
         {songs.map(song => (
-          <li key={song.id} style={{ marginBottom: '10px' }}>
+          <li key={song.song_url} style={{ marginBottom: '10px' }}>
             <a
-              href={song.url}
+              href={song.song_url}
               target="_blank"
               rel="noopener noreferrer"
               style={{
                 marginRight: '10px',
                 textDecoration: 'none',
-                color: winner && song.id === winner.id ? 'green' : 'blue', // 🔥 Color winner green
-                fontWeight: winner && song.id === winner.id ? 'bold' : 'normal' // 🔥 Bold winner
+                color: winner && winner.song_url === song.song_url ? 'green' : 'blue',
+                fontWeight: winner && winner.song_url === song.song_url ? 'bold' : 'normal'
               }}
             >
-              {song.url} {winner && song.id === winner.id && '🏆'} {/* 🔥 Add trophy emoji */}
+              {song.song_url} {winner && winner.song_url === song.song_url && '🏆'}
             </a>
             <button
-              onClick={() => voteSong(song.id)}
-              disabled={votedSongIds.includes(song.id)}
+              onClick={() => voteSong(song.song_url)}
+              disabled={votedSongUrls.includes(song.song_url)}
               style={{
                 marginLeft: '10px',
                 padding: '5px 10px',
-                backgroundColor: votedSongIds.includes(song.id) ? '#aaa' : '#28a745',
+                backgroundColor: votedSongUrls.includes(song.song_url) ? '#aaa' : '#28a745',
                 color: 'white',
                 border: 'none',
                 borderRadius: '4px',
-                cursor: votedSongIds.includes(song.id) ? 'not-allowed' : 'pointer'
+                cursor: votedSongUrls.includes(song.song_url) ? 'not-allowed' : 'pointer'
               }}
             >
-              {votedSongIds.includes(song.id) ? 'Voted' : 'Vote'}
+              {votedSongUrls.includes(song.song_url) ? 'Voted' : 'Vote'}
             </button>
           </li>
         ))}
       </ul>
 
+      {/* BUTTONS */}
       {songs.length > 0 && (
         <div style={{ marginTop: '30px' }}>
           <button
@@ -165,18 +190,18 @@ const SongVotingApp: React.FC = () => {
         </div>
       )}
 
+      {/* WINNER */}
       {showWinner && winner && (
         <div style={{ marginTop: '20px' }}>
           <h2>🏆 Winner:</h2>
           <a
-            href={winner.url}
+            href={winner.song_url}
             target="_blank"
             rel="noopener noreferrer"
             style={{ fontSize: '18px', textDecoration: 'none', color: 'green' }}
           >
-            {winner.url}
+            {winner.song_url}
           </a>
-          <p style={{ fontWeight: 'bold' }}>{winner.votes} votes</p>
         </div>
       )}
     </div>
