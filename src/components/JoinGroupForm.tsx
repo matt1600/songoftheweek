@@ -16,6 +16,8 @@ export default function JoinGroupForm() {
       return;
     }
 
+    localStorage.setItem('userName', userName);
+
     try {
       const res = await fetch(`/api/groups/${groupId}/members`, {
         method: 'POST',

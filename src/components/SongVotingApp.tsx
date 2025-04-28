@@ -16,6 +16,7 @@ const SongVotingApp: React.FC = () => {
   const [winner, setWinner] = useState<Song | null>(null);
   const pathname = usePathname();
   const groupId = pathname.split('/').pop();
+  const userName = localStorage.getItem('userName');
 
   useEffect(() => {
     fetchSongs();
@@ -56,7 +57,7 @@ const SongVotingApp: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          submitting_user: 'Anonymous', // or ask for name if you want
+          submitting_user: userName,
           song_url: formattedUrl,
         }),
       });
@@ -86,7 +87,7 @@ const SongVotingApp: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          voting_user: 'Anonymous', // or dynamically set the username if you want
+          voting_user: userName,
           song_url: url,
         }),
       });
@@ -125,6 +126,7 @@ const SongVotingApp: React.FC = () => {
   return (
     <div className="App">
       <h1>Song of the Week 🎵</h1>
+      <p> Your name is {userName} </p>
 
       {/* ADD SONG INPUT */}
       <div style={{ marginBottom: '20px' }}>
