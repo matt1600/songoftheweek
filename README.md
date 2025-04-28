@@ -23,6 +23,7 @@ groups (
 group_members (
     group_id VARCHAR
     user_name VARCHAR
+    is_owner BOOL
 )
 
 songs (
