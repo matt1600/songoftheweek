@@ -16,7 +16,6 @@ const SongVotingApp: React.FC = () => {
   const [winner, setWinner] = useState<Song | null>(null);
   const pathname = usePathname();
   const groupId = pathname.split('/').pop();
-  const userName = localStorage.getItem('userName');
 
   useEffect(() => {
     fetchSongs();
@@ -51,7 +50,8 @@ const SongVotingApp: React.FC = () => {
     const formattedUrl = newUrl.startsWith('http') ? newUrl : `https://${newUrl}`;
 
     try {
-      const response = await fetch('/api/songs/group1', {
+      const userName = localStorage.getItem('userName');
+      const response = await fetch(`/api/songs/${groupId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,6 +81,7 @@ const SongVotingApp: React.FC = () => {
     if (votedSongUrls.includes(url)) return;
   
     try {
+      const userName = localStorage.getItem('userName');
       const response = await fetch(`/api/votes/${groupId}`, {
         method: 'POST',
         headers: {
@@ -126,7 +127,6 @@ const SongVotingApp: React.FC = () => {
   return (
     <div className="App">
       <h1>Song of the Week 🎵</h1>
-      <p> Your name is {userName} </p>
 
       {/* ADD SONG INPUT */}
       <div style={{ marginBottom: '20px' }}>
