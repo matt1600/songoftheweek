@@ -76,9 +76,31 @@ const SongVotingApp: React.FC = () => {
     }
   };
 
-  const voteSong = (url: string) => {
+  const voteSong = async (url: string) => {
     if (votedSongUrls.includes(url)) return;
-    setVotedSongUrls(prev => [...prev, url]);
+  
+    try {
+      const response = await fetch(`/api/votes/${groupId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          voting_user: 'Anonymous', // or dynamically set the username if you want
+          song_url: url,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        setVotedSongUrls(prev => [...prev, url]);
+      } else {
+        console.error('Error voting for song:', data.error);
+      }
+    } catch (error) {
+      console.error('Error voting for song:', error);
+    }
   };
 
   const resetApp = () => {
