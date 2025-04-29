@@ -2,8 +2,9 @@ import { supabase } from '@/lib/supabase';
 import { NextRequest } from 'next/server';
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const group_id = searchParams.get('group_id');
+  const url = new URL(request.url);
+  const segments = url.pathname.split('/').filter(Boolean); // removes empty strings
+  const group_id = segments[segments.length - 2];
 
   if (!group_id) {
     return new Response(JSON.stringify({ error: 'Missing group_id' }), { status: 400 });
