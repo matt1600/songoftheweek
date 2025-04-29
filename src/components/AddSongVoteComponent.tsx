@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import YouTubeVideoCard from '@/components/YoutubeVideoCard';
 import styles from './add-song-vote.module.css'; // Import CSS module
 import '@/styles/globals.css';
 
@@ -77,9 +78,7 @@ const AddSongVoteComponent = () => {
       <ul className={styles.songsList}>
         {songs.map(song => (
           <li key={song.song_url} className={styles.listItem}>
-            <a href={song.song_url} target="_blank" className={styles.songLink}>
-              {song.song_url}
-            </a>
+            <YouTubeVideoCard videoUrl={song.song_url}/>
             <button
               className={styles.voteButton}
               onClick={() => voteSong(song.song_url)}
