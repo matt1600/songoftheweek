@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation'; // make sure it's imported at the top
 import AddSongVoteComponent from '@/components/AddSongVoteComponent';
 import GroupAdminButton from '@/components/GroupAdminButton';
 import styles from './group-client-component.module.css';
@@ -30,7 +31,16 @@ export default function GroupClientComponent({ groupId }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // ✅ Moved to top
+  const pathname = usePathname();
+  const [copied, setCopied] = useState(false);
+
+  const shareUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}${pathname}`
+    : '';
+
   useEffect(() => {
+    const username = localStorage.getItem('userName');
     const loadMembers = async () => {
       try {
         const fetchedMembers = await fetchGroupMembers(groupId);
@@ -42,8 +52,27 @@ export default function GroupClientComponent({ groupId }: Props) {
       }
     };
 
-    loadMembers();
+    const joinGroup = async () => {
+      try {
+        await fetch(`/api/groups/${groupId}/add-user`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userName: username }),
+        });
+      } catch (error) {
+        console.error('Failed to add user to group:', error);
+      }
+    };
+
+    joinGroup().then(loadMembers);
   }, [groupId]);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   if (loading) return <div className={styles.container}>Loading members...</div>;
   if (error) return <div className={styles.container}>Error: {error}</div>;
@@ -67,6 +96,22 @@ export default function GroupClientComponent({ groupId }: Props) {
         <AddSongVoteComponent />
       </div>
       <GroupAdminButton />
+
+      {/* Share Link Section */}
+      <div className={styles.shareContainer}>
+        <p>Invite a friend to join this group:</p>
+        <div className={styles.shareLinkBox}>
+          <input
+            type="text"
+            readOnly
+            value={shareUrl}
+            className={styles.shareInput}
+          />
+          <button onClick={handleCopy} className={styles.shareButton}>
+            {copied ? 'Copied!' : 'Copy Link'}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

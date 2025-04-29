@@ -58,3 +58,36 @@
     display: flex;
     gap: 20px;
   }
+
+  .shareContainer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ccc;
+    text-align: center;
+  }
+  
+  .shareLinkBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .shareInput {
+    width: 300px;
+    padding: 0.5rem;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  
+  .shareButton {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }  
