@@ -1,0 +1,42 @@
+.container {
+    background-color: var(--background);
+    color: var(--foreground);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    margin-top: 20px;
+  }
+  
+  .heading {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    text-align: center;
+  }
+  
+  .resultsList {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .listItem {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .listItem:last-child {
+    border-bottom: none;
+  }
+  
+  .songUrl {
+    flex-grow: 1;
+    margin-right: 15px;
+  }
+  
+  .votes {
+    font-weight: bold;
+    color: var(--secondary-color);
+  }

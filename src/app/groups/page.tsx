@@ -1,6 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import styles from './page.module.css'; // Import the CSS module
 
 const GroupLandingPage = () => {
   const [myGroups, setMyGroups] = useState<string[]>([]);
@@ -25,15 +26,17 @@ const GroupLandingPage = () => {
   }, [router]);
 
   return (
-    <div>
-      <h1>Song of the Week</h1>
-      <button onClick={() => router.push('/groups/create')}>Create Group</button>
-      <button onClick={() => router.push('/groups/join')}>Join Group</button>
+    <div className={styles.container}>
+      <h1 className={styles.heading}>Song of the Week</h1>
+      <div className={styles.buttonContainer}>
+        <button className={styles.actionButton} onClick={() => router.push('/groups/create')}>Create Group</button>
+        <button className={styles.actionButton} onClick={() => router.push('/groups/join')}>Join Group</button>
+      </div>
 
-      <h2>My Groups</h2>
+      <h2 className={styles.myGroupsTitle}>My Groups</h2>
       {myGroups.map(groupId => (
         <div key={groupId}>
-          <button onClick={() => router.push(`/groups/${groupId}`)}>{groupId}</button>
+          <button className={styles.groupButton} onClick={() => router.push(`/groups/${groupId}`)}>{groupId}</button>
         </div>
       ))}
     </div>

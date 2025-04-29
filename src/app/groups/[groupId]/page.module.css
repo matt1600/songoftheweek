@@ -1,0 +1,60 @@
+.container {
+    padding: 20px;
+    background-color: var(--background);
+    color: var(--foreground);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .heading {
+    font-size: 2.2em;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+  }
+  
+  .membersSection {
+    background-color: #f8f8f8;
+    color: #333;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: var(--box-shadow);
+    width: 80%;
+    max-width: 500px;
+  }
+  
+  .membersHeading {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: var(--secondary-color);
+    text-align: center;
+  }
+  
+  .membersList {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .memberItem {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+  }
+  
+  .memberItem:last-child {
+    border-bottom: none;
+  }
+  
+  .noMembers {
+    text-align: center;
+    font-style: italic;
+    color: #777;
+  }
+  
+  .actionsContainer {
+    margin-top: 40px;
+    display: flex;
+    gap: 20px;
+  }
