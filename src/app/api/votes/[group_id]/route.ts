@@ -10,7 +10,7 @@ export async function GET(request: Request, { params }: { params: { group_id: st
   const { data, error } = await supabase
     .from('votes')
     .select('voting_user, song_url')
-    .eq('group_id', group_id);
+    .ilike('group_id', group_id);
 
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 404 });
@@ -35,7 +35,10 @@ export async function POST(request: Request, { params }: { params: { group_id: s
 
   const { data, error } = await supabase
     .from('votes')
-    .upsert([{ group_id, voting_user, song_url }], { onConflict: ['group_id', 'voting_user'] });
+    .upsert([{ group_id, voting_user, song_url }], {
+      onConflict: ['group_id', 'voting_user', 'song_url'],
+      ignoreDuplicates: true,
+    });
 
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 400 });

@@ -9,7 +9,7 @@ export async function GET(request: Request, { params }: { params: { group_id: st
 
   const { data, error } = await supabase
     .from('group_members')
-    .select('user_name')
+    .select('user_name, is_owner')
     .ilike('group_id', group_id);
 
   if (error) {

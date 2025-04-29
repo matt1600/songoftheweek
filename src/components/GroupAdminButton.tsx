@@ -1,20 +1,24 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const GroupAdminButton = () => {
   const pathname = usePathname();
   const groupId = pathname.split('/').pop();
   const [isOwner, setIsOwner] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const checkOwner = async () => {
       const username = localStorage.getItem('userName');
       const response = await fetch(`/api/groups/${groupId}/members`);
       const data = await response.json();
+      console.log(`data: ${JSON.stringify(data, null, 2)}`)
       if (response.ok) {
         const owner = data.find((member: { user_name: string, is_owner: boolean }) => member.user_name === username && member.is_owner);
         setIsOwner(!!owner);
+        console.log(`owner: ${owner}`)
       }
     };
     checkOwner();
@@ -32,7 +36,7 @@ const GroupAdminButton = () => {
       body: JSON.stringify({ status: 'ended' })
     });
 
-    window.location.reload();
+    router.push(`/groups/${groupId}/results`)
   };
 
   return (

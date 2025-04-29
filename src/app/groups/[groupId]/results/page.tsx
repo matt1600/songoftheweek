@@ -10,7 +10,8 @@ interface VoteResult {
 const DisplayResultsComponent = () => {
   const [results, setResults] = useState<VoteResult[]>([]);
   const pathname = usePathname();
-  const groupId = pathname.split('/').pop();
+  const urlSegments = pathname.split('/').filter(Boolean); // remove empty parts
+  const groupId = urlSegments[urlSegments.length - 2];
 
   useEffect(() => {
     const fetchResults = async () => {

@@ -1,4 +1,5 @@
-import SongVotingApp from '@/components/SongVotingApp';
+import AddSongVoteComponent from '@/components/AddSongVoteComponent';
+import GroupAdminButton from '@/components/GroupAdminButton';
 
 interface GroupMember {
     user_name: string;
@@ -42,7 +43,8 @@ interface GroupMember {
           <p>No members found.</p>
         )}
         <div style={{ marginTop: '40px' }}>
-            <SongVotingApp />
+            <AddSongVoteComponent />
+            <GroupAdminButton />
         </div>
       </div>
     );
