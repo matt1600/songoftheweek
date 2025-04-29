@@ -35,7 +35,7 @@ export async function POST(request: Request, { params }: { params: { group_id: s
 
   const { data, error } = await supabase
     .from('group_members')
-    .insert([{ group_id, user_name, false }]);
+    .insert([{ group_id, user_name}]);
 
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 400 });

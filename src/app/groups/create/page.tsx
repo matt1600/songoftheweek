@@ -13,7 +13,7 @@ const CreateGroupPage = () => {
     const response = await fetch('/api/groups', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ group_name: groupName, created_by: username })
+      body: JSON.stringify({ group_id: groupName, created_by: username })
     });
 
     const data = await response.json();
