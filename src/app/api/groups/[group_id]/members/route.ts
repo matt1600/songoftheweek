@@ -1,10 +1,15 @@
 import { supabase } from '@/lib/supabase';
 import { NextRequest } from 'next/server';
 
-export async function GET(request: NextRequest) {
+function getGroupIdFromPath(request: NextRequest) {
   const url = new URL(request.url);
-  const segments = url.pathname.split('/').filter(Boolean); // removes empty strings
+  const segments = url.pathname.split('/').filter(Boolean);
   const group_id = segments[segments.length - 2];
+  return group_id;
+}
+
+export async function GET(request: NextRequest) {
+  const group_id = getGroupIdFromPath(request);
 
   if (!group_id) {
     return new Response(JSON.stringify({ error: 'Missing group_id' }), { status: 400 });
@@ -23,8 +28,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const group_id = searchParams.get('group_id');
+  const group_id = getGroupIdFromPath(request);
 
   if (!group_id) {
     return new Response(JSON.stringify({ error: 'Missing group_id' }), { status: 400 });

@@ -29,8 +29,11 @@ const JoinGroupPage = () => {
       <input
         className={styles.input}
         value={groupId}
-        onChange={(e) => setGroupId(e.target.value)}
-        placeholder="Group ID"
+        onChange={(e) => {
+          const input = e.target.value.toUpperCase();
+          const filtered = input.replace(/[^A-Z0-9_]/g, '');
+        setGroupId(filtered);}}
+        placeholder="Group Name"
       />
       <button className={styles.button} onClick={joinGroup}>Join</button>
     </div>

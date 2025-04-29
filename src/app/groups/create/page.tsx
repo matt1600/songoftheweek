@@ -30,7 +30,10 @@ const CreateGroupPage = () => {
       <input
         className={styles.input}
         value={groupName}
-        onChange={(e) => setGroupName(e.target.value)}
+        onChange={(e) => {
+          const input = e.target.value.toUpperCase();
+          const filtered = input.replace(/[^A-Z0-9_]/g, '');
+        setGroupName(filtered);}}
         placeholder="Group Name"
       />
       <button className={styles.button} onClick={createGroup}>Create</button>
