@@ -1,14 +1,10 @@
 import GroupClientComponent from '@/components/GroupClientComponent';
 
-interface PageParams {
-  groupId: string;
-}
-
 export default async function GroupPage({
   params,
 }: {
-  params: PageParams;
+  params: Promise<{ groupId: string }>;
 }) {
-  // even if you don't await anything here, that's fine
-  return <GroupClientComponent groupId={params.groupId} />;
+  const resolvedParams = await params;
+  return <GroupClientComponent groupId={resolvedParams.groupId} />;
 }
