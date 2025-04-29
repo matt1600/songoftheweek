@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import AddSongVoteComponent from '@/components/AddSongVoteComponent';
 import GroupAdminButton from '@/components/GroupAdminButton';
-import styles from './page.module.css';
+import styles from './group-client-component.module.css';
 
 interface GroupMember {
   user_name: string;
