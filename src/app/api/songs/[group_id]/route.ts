@@ -1,11 +1,11 @@
 import { supabase } from '@/lib/supabase';
 import { NextRequest } from 'next/server';
 
-// Helper to extract group_id from the URL
-function getGroupIdFromPath(request: NextRequest): string | null {
-  const segments = request.nextUrl.pathname.split('/');
-  const groupIndex = segments.findIndex(segment => segment === 'groups');
-  return groupIndex !== -1 && segments.length > groupIndex + 1 ? segments[groupIndex + 1] : null;
+function getGroupIdFromPath(request: NextRequest) {
+  const url = new URL(request.url);
+  const segments = url.pathname.split('/').filter(Boolean); // removes empty strings
+  const group_id = segments[segments.length - 1];
+  return group_id
 }
 
 export async function GET(request: NextRequest) {
