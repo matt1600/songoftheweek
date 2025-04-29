@@ -54,10 +54,10 @@ export default function GroupClientComponent({ groupId }: Props) {
 
     const joinGroup = async () => {
       try {
-        await fetch(`/api/groups/${groupId}/add-user`, {
+        await fetch(`/api/groups/${groupId}/members`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userName: username }),
+          body: JSON.stringify({ user_name: username }),
         });
       } catch (error) {
         console.error('Failed to add user to group:', error);
