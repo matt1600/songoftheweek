@@ -1,6 +1,16 @@
 import GroupClientComponent from '@/components/GroupClientComponent';
-import { PageProps } from 'next/types'; // Import the built-in PageProps
+import { NextPage } from 'next';
 
-export default function GroupPage({ params }: PageProps<{ groupId: string }>) {
-  return <GroupClientComponent groupId={params.groupId} />;
+interface PageParams {
+  groupId: string;
 }
+
+interface Props {
+  params: PageParams;
+}
+
+const GroupPage: NextPage<Props> = ({ params }) => {
+  return <GroupClientComponent groupId={params.groupId} />;
+};
+
+export default GroupPage;
