@@ -1,0 +1,29 @@
+.container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center; /* Center the button horizontally */
+  }
+  
+  .button {
+    padding: 10px 15px;
+    background-color: #dc3545; /* A red color for admin actions */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #c82333;
+  }
+  
+  .disabledButton {
+    background-color: #6c757d; /* Greyed out for disabled state */
+    cursor: not-allowed;
+  }
+  
+  .disabledButton:hover {
+    background-color: #6c757d; /* Maintain grey on hover */
+  }

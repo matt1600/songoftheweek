@@ -1,0 +1,47 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh; /* Adjust as needed for vertical centering */
+    padding: 20px;
+    background-color: var(--background);
+    color: var(--foreground);
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    margin: 20px auto; /* Center the container horizontally with some top/bottom margin */
+    width: 80%;
+    max-width: 400px; /* Limit the maximum width of the container */
+  }
+  
+  .heading {
+    font-size: 2em;
+    margin-bottom: 25px;
+    color: var(--primary-color);
+    text-align: center;
+  }
+  
+  .input {
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1em;
+    margin-bottom: 20px;
+    width: 100%; /* Make the input take full width of its container */
+  }
+  
+  .button {
+    padding: 12px 20px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Make the button take full width of its container */
+  }
+  
+  .button:hover {
+    background-color: #1e7e34;
+  }

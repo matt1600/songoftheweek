@@ -36,7 +36,7 @@ export async function POST(request: Request, { params }: { params: { group_id: s
   const { data, error } = await supabase
     .from('votes')
     .upsert([{ group_id, voting_user, song_url }], {
-      onConflict: ['group_id', 'voting_user', 'song_url'],
+      onConflict: 'group_id, voting_user, song_url',
       ignoreDuplicates: true,
     });
 

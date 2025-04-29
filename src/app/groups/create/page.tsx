@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import styles from './page.module.css'; // Import CSS module
+import '@/styles/globals.css'
 
 const CreateGroupPage = () => {
   const [groupName, setGroupName] = useState('');
@@ -23,10 +25,15 @@ const CreateGroupPage = () => {
   };
 
   return (
-    <div>
-      <h1>Create Group</h1>
-      <input value={groupName} onChange={(e) => setGroupName(e.target.value)} placeholder="Group Name" />
-      <button onClick={createGroup}>Create</button>
+    <div className={styles.container}>
+      <h1 className={styles.heading}>Create Group</h1>
+      <input
+        className={styles.input}
+        value={groupName}
+        onChange={(e) => setGroupName(e.target.value)}
+        placeholder="Group Name"
+      />
+      <button className={styles.button} onClick={createGroup}>Create</button>
     </div>
   );
 };

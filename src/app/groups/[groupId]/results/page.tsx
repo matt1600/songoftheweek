@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import styles from './display-results.module.css'; // Import CSS module
+import styles from './page.module.css'; // Import CSS module
+import '@/styles/globals.css';
 
 interface VoteResult {
   song_url: string;

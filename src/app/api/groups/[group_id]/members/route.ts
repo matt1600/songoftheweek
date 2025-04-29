@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase';
 
 export async function GET(request: Request, { params }: { params: { group_id: string } }) {
-  const { group_id } = params;
+  const { group_id } = await params;
 
   if (!group_id) {
     return new Response(JSON.stringify({ error: 'Missing group_id' }), { status: 400 });
@@ -20,7 +20,7 @@ export async function GET(request: Request, { params }: { params: { group_id: st
 }
 
 export async function POST(request: Request, { params }: { params: { group_id: string } }) {
-  const { group_id } = params;
+  const { group_id } = await params;
 
   if (!group_id) {
     return new Response(JSON.stringify({ error: 'Missing group_id' }), { status: 400 });
@@ -35,7 +35,10 @@ export async function POST(request: Request, { params }: { params: { group_id: s
 
   const { data, error } = await supabase
     .from('group_members')
-    .insert([{ group_id, user_name}]);
+    .upsert([{ group_id, user_name}], {
+      onConflict: 'group_id, user_name',
+      ignoreDuplicates: true
+    });
 
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 400 });
