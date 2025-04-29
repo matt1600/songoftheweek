@@ -35,19 +35,13 @@ export default function YouTubeVideoCard({ videoUrl }: YouTubeVideoCardProps) {
   }
 
   return (
-    <a
-      href={videoUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block w-80 border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
-    >
-      {thumbnailUrl && (
-        <img src={thumbnailUrl} alt={title} className="w-full h-48 object-cover" />
-      )}
-      <div className="p-4">
-        <h2 className="text-lg font-semibold">{title || 'Loading...'}</h2>
-        <p className="text-sm text-gray-500">YouTube Video</p>
-      </div>
+    <a href={videoUrl} className="youtube-card" target="_blank" rel="noopener noreferrer">
+        <div className="youtube-thumbnail">
+            <img src={thumbnailUrl} alt={title} />
+        </div>
+        <div className="youtube-card-body">
+            <h4>{title || 'Loading...'}</h4>
+        </div>
     </a>
   );
 }
