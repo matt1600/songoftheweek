@@ -1,8 +1,9 @@
 import { supabase } from '@/lib/supabase';
 import { NextRequest } from 'next/server';
 
-export async function GET(request: NextRequest, { params }: { params: { group_id: string } }) {
-  const { group_id } = params;
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const group_id = searchParams.get('group_id');
 
   if (!group_id) {
     return new Response(JSON.stringify({ error: 'Missing group_id' }), { status: 400 });
@@ -20,8 +21,9 @@ export async function GET(request: NextRequest, { params }: { params: { group_id
   return new Response(JSON.stringify(data), { status: 200 });
 }
 
-export async function POST(request: NextRequest, { params }: { params: { group_id: string } }) {
-  const { group_id } = params;
+export async function POST(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const group_id = searchParams.get('group_id');
 
   if (!group_id) {
     return new Response(JSON.stringify({ error: 'Missing group_id' }), { status: 400 });
@@ -36,7 +38,7 @@ export async function POST(request: NextRequest, { params }: { params: { group_i
 
   const { data, error } = await supabase
     .from('group_members')
-    .upsert([{ group_id, user_name}], {
+    .upsert([{ group_id, user_name }], {
       onConflict: 'group_id, user_name',
       ignoreDuplicates: true
     });
