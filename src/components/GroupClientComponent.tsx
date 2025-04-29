@@ -80,18 +80,6 @@ export default function GroupClientComponent({ groupId }: Props) {
   return (
     <div className={styles.container}>
       <h1 className={styles.heading}>Welcome to {groupId}</h1>
-      <section className={styles.membersSection}>
-        <h2 className={styles.membersHeading}>Group Members:</h2>
-        {members.length > 0 ? (
-          <ul className={styles.membersList}>
-            {members.map((member, index) => (
-              <li key={index} className={styles.memberItem}>{member.user_name}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className={styles.noMembers}>No members found.</p>
-        )}
-      </section>
       <div className={styles.actionsContainer}>
         <AddSongVoteComponent />
       </div>
@@ -112,6 +100,18 @@ export default function GroupClientComponent({ groupId }: Props) {
           </button>
         </div>
       </div>
+      <section className={styles.membersSection}>
+        <h2 className={styles.membersHeading}>Group Members:</h2>
+        {members.length > 0 ? (
+          <ul className={styles.membersList}>
+            {members.map((member, index) => (
+              <li key={index} className={styles.memberItem}>{member.user_name}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className={styles.noMembers}>No members found.</p>
+        )}
+      </section>
     </div>
   );
 }
