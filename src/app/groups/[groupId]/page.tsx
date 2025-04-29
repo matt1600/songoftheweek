@@ -6,6 +6,6 @@ interface PageProps {
   };
 }
 
-export default function GroupPage({ params }: PageProps) {
+export default async function GroupPage({ params }: PageProps) {
   return <GroupClientComponent groupId={params.groupId} />;
 }
