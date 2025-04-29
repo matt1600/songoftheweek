@@ -4,6 +4,11 @@ interface PageParams {
   groupId: string;
 }
 
-export default function GroupPage({ params }: { params: PageParams }) {
+export default async function GroupPage({
+  params,
+}: {
+  params: PageParams;
+}) {
+  // even if you don't await anything here, that's fine
   return <GroupClientComponent groupId={params.groupId} />;
 }
