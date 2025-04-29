@@ -22,13 +22,13 @@ async function fetchGroupMembers(groupId: string): Promise<GroupMember[]> {
   return res.json();
 }
 
-interface GroupPageProps {
+interface PageProps {
   params: {
     groupId: string;
   };
 }
 
-export default function GroupPage({ params }: GroupPageProps) {
+export default function GroupPage({ params }: PageProps) {
   const { groupId } = params;
   const [members, setMembers] = useState<GroupMember[]>([]);
   const [loading, setLoading] = useState(true);
@@ -49,7 +49,7 @@ export default function GroupPage({ params }: GroupPageProps) {
     };
 
     loadMembers();
-  }, [groupId]); // Re-fetch members if groupId changes (though it shouldn't on this page)
+  }, [groupId]);
 
   if (loading) {
     return <div className={styles.container}>Loading members...</div>;
