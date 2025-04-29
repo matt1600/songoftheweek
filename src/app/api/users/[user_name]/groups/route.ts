@@ -1,7 +1,15 @@
 import { supabase } from '@/lib/supabase';
+import { NextRequest } from 'next/server';
 
-export async function GET(request: Request, { params }: { params: { user_name: string } }) {
-  const { user_name } = params;
+// Helper to extract user_name from the URL
+function getUserNameFromPath(request: NextRequest): string | null {
+  const segments = request.nextUrl.pathname.split('/');
+  const userIndex = segments.findIndex(segment => segment === 'users');
+  return userIndex !== -1 && segments.length > userIndex + 1 ? segments[userIndex + 1] : null;
+}
+
+export async function GET(request: NextRequest) {
+  const user_name = getUserNameFromPath(request);
 
   if (!user_name) {
     return new Response(JSON.stringify({ error: 'Missing user_name' }), { status: 400 });

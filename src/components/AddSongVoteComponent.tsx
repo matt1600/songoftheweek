@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import styles from './add-song-vote.module.css'; // Import CSS module
+import '@/styles/globals.css';
 
 interface Song {
   song_url: string;
@@ -15,9 +17,10 @@ const AddSongVoteComponent = () => {
 
   useEffect(() => {
     fetchSongs();
-  }, []);
+  }, [groupId]); // Fetch songs when groupId changes (important for dynamic routes)
 
   const fetchSongs = async () => {
+    if (!groupId) return;
     const response = await fetch(`/api/songs/${groupId}`);
     const data = await response.json();
     if (response.ok) setSongs(data);
@@ -25,42 +28,63 @@ const AddSongVoteComponent = () => {
 
   const addSong = async () => {
     const username = localStorage.getItem('userName');
-    if (!newSongUrl.trim() || !username) return;
+    if (!newSongUrl.trim() || !username || !groupId) return;
 
-    await fetch(`/api/songs/${groupId}`, {
+    const response = await fetch(`/api/songs/${groupId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ submitting_user: username, song_url: newSongUrl })
     });
 
-    setNewSongUrl('');
-    fetchSongs();
+    if (response.ok) {
+      setNewSongUrl('');
+      fetchSongs();
+    } else {
+      console.error('Failed to add song');
+    }
   };
 
   const voteSong = async (url: string) => {
     const username = localStorage.getItem('userName');
-    if (votedSongs.includes(url) || !username) return;
+    if (!groupId || votedSongs.includes(url) || !username) return;
 
-    await fetch(`/api/votes/${groupId}`, {
+    const response = await fetch(`/api/votes/${groupId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ voting_user: username, song_url: url })
     });
 
-    setVotedSongs([...votedSongs, url]);
+    if (response.ok) {
+      setVotedSongs([...votedSongs, url]);
+    } else {
+      console.error('Failed to vote for song');
+    }
   };
 
   return (
-    <div>
-      <h2>Songs</h2>
-      <input value={newSongUrl} onChange={(e) => setNewSongUrl(e.target.value)} placeholder="Song URL" />
-      <button onClick={addSong}>Add Song</button>
+    <div className={styles.container}>
+      <h2 className={styles.heading}>Songs</h2>
+      <div className={styles.inputContainer}>
+        <input
+          className={styles.input}
+          value={newSongUrl}
+          onChange={(e) => setNewSongUrl(e.target.value)}
+          placeholder="Song URL"
+        />
+        <button className={styles.addButton} onClick={addSong}>Add Song</button>
+      </div>
 
-      <ul>
+      <ul className={styles.songsList}>
         {songs.map(song => (
-          <li key={song.song_url}>
-            <a href={song.song_url} target="_blank">{song.song_url}</a>
-            <button onClick={() => voteSong(song.song_url)} disabled={votedSongs.includes(song.song_url)}>
+          <li key={song.song_url} className={styles.listItem}>
+            <a href={song.song_url} target="_blank" className={styles.songLink}>
+              {song.song_url}
+            </a>
+            <button
+              className={styles.voteButton}
+              onClick={() => voteSong(song.song_url)}
+              disabled={votedSongs.includes(song.song_url)}
+            >
               {votedSongs.includes(song.song_url) ? 'Voted' : 'Vote'}
             </button>
           </li>

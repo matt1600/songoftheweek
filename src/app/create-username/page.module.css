@@ -1,0 +1,46 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    min-height: 100vh; /* Make the container take up at least the full viewport height */
+    padding: 20px;
+    background-color: #f4f4f4; /* A light background color */
+  }
+  
+  .heading {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 2em;
+  }
+  
+  .inputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 80%; /* Adjust width as needed */
+    max-width: 400px; /* Set a maximum width */
+  }
+  
+  .input {
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+  }
+  
+  .button {
+    padding: 12px 20px;
+    background-color: #007bff; /* A nice blue color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease; /* Add a smooth transition for hover effect */
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }

@@ -1,6 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import styles from './page.module.css'; // Import CSS module
+import '@/styles/globals.css';
 
 interface VoteResult {
   song_url: string;
@@ -10,7 +12,7 @@ interface VoteResult {
 const DisplayResultsComponent = () => {
   const [results, setResults] = useState<VoteResult[]>([]);
   const pathname = usePathname();
-  const urlSegments = pathname.split('/').filter(Boolean); // remove empty parts
+  const urlSegments = pathname.split('/').filter(Boolean);
   const groupId = urlSegments[urlSegments.length - 2];
 
   useEffect(() => {
@@ -32,12 +34,13 @@ const DisplayResultsComponent = () => {
   }, [groupId]);
 
   return (
-    <div>
-      <h2>Results</h2>
-      <ul>
+    <div className={styles.container}>
+      <h2 className={styles.heading}>Results</h2>
+      <ul className={styles.resultsList}>
         {results.map(result => (
-          <li key={result.song_url}>
-            {result.song_url} - {result.votes} votes
+          <li key={result.song_url} className={styles.listItem}>
+            <span className={styles.songUrl}>{result.song_url}</span>
+            <span className={styles.votes}>{result.votes} votes</span>
           </li>
         ))}
       </ul>
