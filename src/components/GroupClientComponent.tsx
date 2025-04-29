@@ -74,7 +74,7 @@ export default function GroupClientComponent({ groupId }: Props) {
     });
   };
 
-  if (loading) return <div className={styles.container}>Loading members...</div>;
+  if (loading) return <div className={styles.container}>Loading group...</div>;
   if (error) return <div className={styles.container}>Error: {error}</div>;
 
   return (
