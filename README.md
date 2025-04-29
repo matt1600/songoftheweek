@@ -13,8 +13,11 @@
 ## Tech Stack
 
 NextJS Front End
+
 Vercel Serverless Functions Backend (api routes)
+
 Supabase database
+
 -- login is tied to zachwalravens github
 
 ## Database Structure
