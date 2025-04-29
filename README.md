@@ -6,6 +6,10 @@
 
 * Add logo and name for browser window
 
+## Running in Dev
+
+`npm run dev`
+
 ## Tech Stack
 
 NextJS Front End
