@@ -70,7 +70,7 @@ const AddSongVoteComponent = () => {
           className={styles.input}
           value={newSongUrl}
           onChange={(e) => setNewSongUrl(e.target.value)}
-          placeholder="Song URL"
+          placeholder="Youtube URL"
         />
         <button className={styles.addButton} onClick={addSong}>Add Song</button>
       </div>
