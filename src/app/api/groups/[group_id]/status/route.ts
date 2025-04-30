@@ -41,12 +41,18 @@ export async function GET(request: NextRequest) {
   const { data, error } = await supabase
     .from('groups')
     .select('is_finished')
-    .eq('group_id', group_id)
-    .single();
+    .eq('group_id', group_id); // Removed .single()
 
   if (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 404 });
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 }); // Changed to 500 for database errors
   }
 
-  return new Response(JSON.stringify({ is_finished: data.is_finished }), { status: 200 });
+  if (!data || data.length === 0) {
+    return new Response(JSON.stringify({ is_finished: false }), { status: 200 });
+  }
+
+  // If there are multiple rows, check if any of them have is_finished as true
+  const isAnyFinished = data.some(row => row.is_finished === true);
+
+  return new Response(JSON.stringify({ is_finished: isAnyFinished }), { status: 200 });
 }

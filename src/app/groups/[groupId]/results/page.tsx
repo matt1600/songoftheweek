@@ -1,8 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import styles from './page.module.css'; // Import CSS module
 import '@/styles/globals.css';
+import YouTubeVideoCard from '@/components/YoutubeVideoCard';
 
 interface VoteResult {
   song_url: string;
@@ -25,7 +27,9 @@ const DisplayResultsComponent = () => {
           voteCount[vote.song_url] = (voteCount[vote.song_url] || 0) + 1;
         });
 
-        const formattedResults = Object.entries(voteCount).map(([song_url, votes]) => ({ song_url, votes }));
+        const formattedResults = Object.entries(voteCount)
+          .map(([song_url, votes]) => ({ song_url, votes }))
+          .sort((a, b) => b.votes - a.votes); // Sort by votes in descending order
         setResults(formattedResults);
       }
     };
@@ -33,17 +37,28 @@ const DisplayResultsComponent = () => {
     fetchResults();
   }, [groupId]);
 
+  const winner = results.length > 0 ? results[0] : null;
+
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>Results</h2>
       <ul className={styles.resultsList}>
         {results.map(result => (
-          <li key={result.song_url} className={styles.listItem}>
-            <span className={styles.songUrl}>{result.song_url}</span>
-            <span className={styles.votes}>{result.votes} votes</span>
+          <li
+            key={result.song_url}
+            className={`${styles.listItem} ${result === winner ? styles.winner : ''}`}
+          >
+            <span className={styles.songUrl}>
+              <YouTubeVideoCard videoUrl={result.song_url} />
+            </span>
+            <span className={styles.votes}>
+              {result.votes} vote{result.votes === 1 ? '' : 's'}
+              {result === winner && <span className={styles.winnerBadge}>🏆 Winner!</span>}
+            </span>
           </li>
         ))}
       </ul>
+      <Link href="/" className={styles.link}><h2 className={styles.header}>Go to Homepage</h2></Link>
     </div>
   );
 };

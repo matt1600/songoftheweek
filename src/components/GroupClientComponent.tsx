@@ -1,9 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation'; // make sure it's imported at the top
 import AddSongVoteComponent from '@/components/AddSongVoteComponent';
 import GroupAdminButton from '@/components/GroupAdminButton';
 import styles from './group-client-component.module.css';
+import { useRouter, usePathname } from 'next/navigation';
+
 
 interface GroupMember {
   user_name: string;
@@ -31,8 +32,8 @@ export default function GroupClientComponent({ groupId }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // ✅ Moved to top
   const pathname = usePathname();
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
 
   const shareUrl = typeof window !== 'undefined'
@@ -64,7 +65,29 @@ export default function GroupClientComponent({ groupId }: Props) {
       }
     };
 
-    joinGroup().then(loadMembers);
+    const rerouteIfFinished = async () => {
+      try {
+        const groupStatus = await fetch(`/api/groups/${groupId}/status`, {
+          method: 'GET'
+        });
+
+        if (groupStatus.ok) {
+          const data = await groupStatus.json();
+          if (data.is_finished) {
+            router.push(`/groups/${groupId}/results`);
+          } else {
+            console.log('Group is not yet finished.');
+          }
+        } else {
+          console.error('Failed to fetch group status:', groupStatus.status);
+        }
+
+      } catch (error) {
+        console.error('Failed to check group status:', error);
+      }
+    };
+
+    joinGroup().then(loadMembers).then(rerouteIfFinished);
   }, [groupId]);
 
   const handleCopy = () => {
