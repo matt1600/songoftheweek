@@ -9,7 +9,7 @@ export default function UsernameGate({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     const userName = localStorage.getItem('userName');
-    if (!userName) {
+    if (!userName && !pathname.startsWith('/create-username')) {
       router.replace(`/create-username?redirect=${encodeURIComponent(pathname)}`);
     }
   }, [router, pathname]);
