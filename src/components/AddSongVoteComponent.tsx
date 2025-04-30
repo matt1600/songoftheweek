@@ -47,18 +47,25 @@ const AddSongVoteComponent = () => {
 
   const voteSong = async (url: string) => {
     const username = localStorage.getItem('userName');
-    if (!groupId || votedSongs.includes(url) || !username) return;
+    if (!groupId || !username) return;
 
-    const response = await fetch(`/api/votes/${groupId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ voting_user: username, song_url: url })
-    });
+    try {
+      const response = await fetch(`/api/votes/${groupId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ voting_user: username, song_url: url })
+      });
 
-    if (response.ok) {
-      setVotedSongs([...votedSongs, url]);
-    } else {
-      console.error('Failed to vote for song');
+      const data = await response.json();
+
+      if (response.ok) {
+        setVotedSongs([...votedSongs, url]);
+      } else {
+        alert(data.error || 'Failed to vote for song');
+      }
+    } catch (error) {
+      console.error('Error voting for song:', error);
+      alert('An error occurred while voting');
     }
   };
 

@@ -41,12 +41,24 @@ export async function POST(request: NextRequest) {
     return new Response(JSON.stringify({ error: 'Missing voting_user or song_url in request body' }), { status: 400 });
   }
 
+  // Check if user has already voted in this group
+  const { data: existingVotes, error: checkError } = await supabase
+    .from('votes')
+    .select('song_url')
+    .eq('group_id', group_id)
+    .eq('voting_user', voting_user);
+
+  if (checkError) {
+    return new Response(JSON.stringify({ error: checkError.message }), { status: 400 });
+  }
+
+  if (existingVotes && existingVotes.length > 0) {
+    return new Response(JSON.stringify({ error: 'User has already voted in this group' }), { status: 400 });
+  }
+
   const { data, error } = await supabase
     .from('votes')
-    .upsert([{ group_id, voting_user, song_url }], {
-      onConflict: 'group_id, voting_user, song_url',
-      ignoreDuplicates: true,
-    });
+    .insert([{ group_id, voting_user, song_url }]);
 
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 400 });
