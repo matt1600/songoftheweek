@@ -77,7 +77,7 @@ const AddSongVoteComponent = () => {
           className={styles.input}
           value={newSongUrl}
           onChange={(e) => setNewSongUrl(e.target.value)}
-          placeholder="Youtube URL"
+          placeholder="YouTube URL"
         />
         <button className={styles.addButton} onClick={addSong}>Add Song</button>
       </div>
@@ -85,7 +85,7 @@ const AddSongVoteComponent = () => {
       <ul className={styles.songsList}>
         {songs.map(song => (
           <li key={song.song_url} className={styles.listItem}>
-            <YouTubeVideoCard videoUrl={song.song_url}/>
+            <YouTubeVideoCard videoUrl={song.song_url} />
             <button
               className={styles.voteButton}
               onClick={() => voteSong(song.song_url)}

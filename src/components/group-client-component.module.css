@@ -1,93 +1,140 @@
 .container {
-    padding: 20px;
-    background-color: var(--background);
-    color: var(--foreground);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .heading {
-    font-size: 2.2em;
-    margin-bottom: 20px;
-    color: var(--primary-color);
-  }
-  
-  .membersSection {
-    background-color: #f8f8f8;
-    color: #333;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 30px;
-    box-shadow: var(--box-shadow);
-    width: 80%;
-    max-width: 500px;
-  }
-  
-  .membersHeading {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-    color: var(--secondary-color);
-    text-align: center;
-  }
-  
-  .membersList {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .memberItem {
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-    text-align: center;
-  }
-  
-  .memberItem:last-child {
-    border-bottom: none;
-  }
-  
-  .noMembers {
-    text-align: center;
-    font-style: italic;
-    color: #777;
-  }
-  
-  .actionsContainer {
-    margin-top: 40px;
-    display: flex;
-    gap: 20px;
-  }
+  padding: 20px;
+  background-color: var(--background);
+  color: var(--foreground);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .shareContainer {
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid #ccc;
-    text-align: center;
-  }
-  
-  .shareLinkBox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-  }
-  
-  .shareInput {
-    width: 300px;
-    padding: 0.5rem;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    font-size: 0.9rem;
-  }
-  
-  .shareButton {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-    background-color: #0070f3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-  }  
+.contentWrapper {
+  width: 100%;
+  max-width: 500px;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.homeButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.homeButton {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.homeButton:hover {
+  background-color: var(--secondary-color);
+}
+
+.heading {
+  font-size: 2.2em;
+  margin-bottom: 0;
+  color: var(--primary-color);
+  text-align: center;
+}
+
+.groupBadge {
+  display: inline-block;
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 auto 1.5rem;
+}
+
+.actionsContainer {
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.shareContainer {
+  padding-top: 1rem;
+  border-top: 1px solid #ccc;
+  text-align: center;
+}
+
+.shareLinkBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  align-items: stretch;
+}
+
+.shareInput {
+  padding: 0.75rem;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.shareButton {
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.shareButton:hover {
+  background-color: #005ac1;
+}
+
+.membersSection {
+  background-color: #f8f8f8;
+  color: #333;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.membersHeading {
+  font-size: 1.5em;
+  margin-bottom: 1rem;
+  color: var(--secondary-color);
+  text-align: center;
+}
+
+.membersList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.memberItem {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.memberItem:last-child {
+  border-bottom: none;
+}
+
+.noMembers {
+  text-align: center;
+  font-style: italic;
+  color: #777;
+}

@@ -1,0 +1,8 @@
+.youtube-thumbnail img {
+    width: 100%;
+    height: 15rem;           /* or a fixed value like 12rem */
+    object-fit: contain;     /* ✅ Shows entire image, adds letterboxing if needed */
+    display: block;
+    border-radius: 8px;
+    background-color: #000;  /* Optional: background fill for letterbox effect */
+  }
