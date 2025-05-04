@@ -50,7 +50,6 @@ export default function ResultsComponent({ groupId }: ResultsComponentProps) {
               {result.is_winner && <div className="winner-badge">Winner! 🏆</div>}
               <YouTubeVideoCard videoUrl={result.song_url} />
               <div className="vote-count">Votes: {result.votes}</div>
-              <div className="submitter">Submitted by: {result.submitting_user}</div>
             </div>
           ))}
         </div>
