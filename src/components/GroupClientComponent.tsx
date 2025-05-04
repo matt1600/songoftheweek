@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import AddSongVoteComponent from '@/components/AddSongVoteComponent';
+import ResultsComponent from '@/components/ResultsComponent';
 import GroupAdminButton from '@/components/GroupAdminButton';
 import styles from './group-client-component.module.css';
 import { useRouter, usePathname } from 'next/navigation';
@@ -51,6 +52,7 @@ export default function GroupClientComponent({ groupId }: Props) {
   const [groupStatus, setGroupStatus] = useState<GroupStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isVotingEnded, setIsVotingEnded] = useState(false);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -70,10 +72,7 @@ export default function GroupClientComponent({ groupId }: Props) {
         ]);
         setMembers(fetchedMembers);
         setGroupStatus(status);
-
-        if (status.is_finished) {
-          router.push(`/groups/${groupId}/results`);
-        }
+        setIsVotingEnded(status.is_finished);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -120,12 +119,16 @@ export default function GroupClientComponent({ groupId }: Props) {
         {groupStatus && (
           <VotingCountdown
             endTime={groupStatus.voting_end_time}
-            onEnd={() => router.push(`/groups/${groupId}/results`)}
+            onEnd={() => setIsVotingEnded(true)}
           />
         )}
   
         <div className={styles.actionsContainer}>
-          <AddSongVoteComponent />
+          {isVotingEnded ? (
+            <ResultsComponent groupId={groupId} />
+          ) : (
+            <AddSongVoteComponent />
+          )}
         </div>
   
         <GroupAdminButton />
