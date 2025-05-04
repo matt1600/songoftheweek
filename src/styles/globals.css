@@ -106,3 +106,11 @@ a {
   color: var(--secondary-color);
   margin: 0;
 }
+
+.voting-countdown .end-time {
+  font-size: 1rem;
+  font-weight: normal;
+  color: var(--foreground);
+  margin-top: 0.5rem;
+  opacity: 0.8;
+}

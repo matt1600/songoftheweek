@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 interface VotingCountdownProps {
-  endTime: string;
+  endTime: string; // This is UTC time from the database
   onEnd: () => void;
 }
 
@@ -12,9 +12,10 @@ export default function VotingCountdown({ endTime, onEnd }: VotingCountdownProps
 
   useEffect(() => {
     const calculateTimeLeft = () => {
-      const end = new Date(endTime).getTime();
-      const now = new Date().getTime();
-      const difference = end - now;
+      // Convert UTC time from database to local time
+      const end = new Date(endTime);
+      const now = new Date();
+      const difference = end.getTime() - now.getTime();
 
       if (difference <= 0) {
         onEnd();
@@ -37,10 +38,25 @@ export default function VotingCountdown({ endTime, onEnd }: VotingCountdownProps
     return () => clearInterval(timer);
   }, [endTime, onEnd]);
 
+  // Format the end time for display in local timezone
+  const formatEndTime = () => {
+    const end = new Date(endTime);
+    return end.toLocaleString(undefined, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      timeZoneName: 'short'
+    });
+  };
+
   return (
     <div className="voting-countdown">
       <h3>Time Remaining:</h3>
       <p>{timeLeft}</p>
+      <p className="end-time">Voting ends at: {formatEndTime()}</p>
     </div>
   );
 } 

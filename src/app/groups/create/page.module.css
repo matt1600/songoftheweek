@@ -30,6 +30,14 @@
     width: 100%; /* Make the input take full width of its container */
   }
   
+  .label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--foreground);
+    font-size: 1em;
+    font-weight: 500;
+  }
+  
   .button {
     padding: 12px 20px;
     background-color: var(--secondary-color);

@@ -64,6 +64,8 @@ export async function GET(request: NextRequest) {
       .eq('group_id', group_id);
   }
 
+  // Return the UTC time from the database
+  // The frontend will handle converting it to local time
   return new Response(JSON.stringify({ 
     is_finished: group.is_finished || isTimeUp,
     voting_end_time: group.voting_end_time
