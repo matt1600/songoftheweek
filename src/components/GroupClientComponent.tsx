@@ -4,10 +4,16 @@ import AddSongVoteComponent from '@/components/AddSongVoteComponent';
 import GroupAdminButton from '@/components/GroupAdminButton';
 import styles from './group-client-component.module.css';
 import { useRouter, usePathname } from 'next/navigation';
+import VotingCountdown from '@/components/VotingCountdown';
 
 
 interface GroupMember {
   user_name: string;
+}
+
+interface GroupStatus {
+  is_finished: boolean;
+  voting_end_time: string;
 }
 
 async function fetchGroupMembers(groupId: string): Promise<GroupMember[]> {
@@ -23,12 +29,26 @@ async function fetchGroupMembers(groupId: string): Promise<GroupMember[]> {
   return res.json();
 }
 
+async function fetchGroupStatus(groupId: string): Promise<GroupStatus> {
+  const res = await fetch(`/api/groups/${groupId}/status`, {
+    method: 'GET',
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch group status');
+  }
+
+  return res.json();
+}
+
 interface Props {
   groupId: string;
 }
 
 export default function GroupClientComponent({ groupId }: Props) {
   const [members, setMembers] = useState<GroupMember[]>([]);
+  const [groupStatus, setGroupStatus] = useState<GroupStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,10 +62,18 @@ export default function GroupClientComponent({ groupId }: Props) {
 
   useEffect(() => {
     const username = localStorage.getItem('userName');
-    const loadMembers = async () => {
+    const loadData = async () => {
       try {
-        const fetchedMembers = await fetchGroupMembers(groupId);
+        const [fetchedMembers, status] = await Promise.all([
+          fetchGroupMembers(groupId),
+          fetchGroupStatus(groupId)
+        ]);
         setMembers(fetchedMembers);
+        setGroupStatus(status);
+
+        if (status.is_finished) {
+          router.push(`/groups/${groupId}/results`);
+        }
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -65,30 +93,8 @@ export default function GroupClientComponent({ groupId }: Props) {
       }
     };
 
-    const rerouteIfFinished = async () => {
-      try {
-        const groupStatus = await fetch(`/api/groups/${groupId}/status`, {
-          method: 'GET'
-        });
-
-        if (groupStatus.ok) {
-          const data = await groupStatus.json();
-          if (data.is_finished) {
-            router.push(`/groups/${groupId}/results`);
-          } else {
-            console.log('Group is not yet finished.');
-          }
-        } else {
-          console.error('Failed to fetch group status:', groupStatus.status);
-        }
-
-      } catch (error) {
-        console.error('Failed to check group status:', error);
-      }
-    };
-
-    joinGroup().then(loadMembers).then(rerouteIfFinished);
-  }, [groupId]);
+    joinGroup().then(loadData);
+  }, [groupId, router]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shareUrl).then(() => {
@@ -110,6 +116,13 @@ export default function GroupClientComponent({ groupId }: Props) {
         </div>
         <h1 className={styles.heading}>Song of the Week 🎵</h1>
         <div className={styles.groupBadge}>{groupId}</div>
+  
+        {groupStatus && (
+          <VotingCountdown
+            endTime={groupStatus.voting_end_time}
+            onEnd={() => router.push(`/groups/${groupId}/results`)}
+          />
+        )}
   
         <div className={styles.actionsContainer}>
           <AddSongVoteComponent />

@@ -40,19 +40,32 @@ export async function GET(request: NextRequest) {
 
   const { data, error } = await supabase
     .from('groups')
-    .select('is_finished')
-    .eq('group_id', group_id); // Removed .single()
+    .select('is_finished, voting_end_time')
+    .eq('group_id', group_id);
 
   if (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 }); // Changed to 500 for database errors
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 
   if (!data || data.length === 0) {
     return new Response(JSON.stringify({ is_finished: false }), { status: 200 });
   }
 
-  // If there are multiple rows, check if any of them have is_finished as true
-  const isAnyFinished = data.some(row => row.is_finished === true);
+  const group = data[0];
+  const now = new Date();
+  const endTime = new Date(group.voting_end_time);
+  const isTimeUp = now >= endTime;
 
-  return new Response(JSON.stringify({ is_finished: isAnyFinished }), { status: 200 });
+  // If time is up, update the group status
+  if (isTimeUp && !group.is_finished) {
+    await supabase
+      .from('groups')
+      .update({ is_finished: true })
+      .eq('group_id', group_id);
+  }
+
+  return new Response(JSON.stringify({ 
+    is_finished: group.is_finished || isTimeUp,
+    voting_end_time: group.voting_end_time
+  }), { status: 200 });
 }

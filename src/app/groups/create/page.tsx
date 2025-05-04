@@ -6,16 +6,21 @@ import '@/styles/globals.css'
 
 const CreateGroupPage = () => {
   const [groupName, setGroupName] = useState('');
+  const [votingEndTime, setVotingEndTime] = useState('');
   const router = useRouter();
 
   const createGroup = async () => {
     const username = localStorage.getItem('userName');
-    if (!groupName.trim() || !username) return;
+    if (!groupName.trim() || !username || !votingEndTime) return;
 
     const response = await fetch('/api/groups', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ group_id: groupName, created_by: username })
+      body: JSON.stringify({ 
+        group_id: groupName, 
+        created_by: username,
+        voting_end_time: votingEndTime 
+      })
     });
 
     const data = await response.json();
@@ -33,10 +38,24 @@ const CreateGroupPage = () => {
         onChange={(e) => {
           const input = e.target.value.toUpperCase();
           const filtered = input.replace(/[^A-Z0-9_]/g, '');
-        setGroupName(filtered);}}
+          setGroupName(filtered);
+        }}
         placeholder="Group Name"
       />
-      <button className={styles.button} onClick={createGroup}>Create</button>
+      <input
+        type="datetime-local"
+        className={styles.input}
+        value={votingEndTime}
+        onChange={(e) => setVotingEndTime(e.target.value)}
+        min={new Date().toISOString().slice(0, 16)}
+      />
+      <button 
+        className={styles.button} 
+        onClick={createGroup}
+        disabled={!groupName || !votingEndTime}
+      >
+        Create
+      </button>
     </div>
   );
 };

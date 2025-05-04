@@ -80,3 +80,29 @@ a {
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   transition: box-shadow 0
 }
+
+.youtube-card:hover {
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.voting-countdown {
+  background-color: var(--background);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin: 1rem 0;
+  box-shadow: var(--box-shadow);
+}
+
+.voting-countdown h3 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.voting-countdown p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--secondary-color);
+  margin: 0;
+}

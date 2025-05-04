@@ -3,15 +3,19 @@ import { NextRequest } from 'next/server';
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { group_id, created_by } = body;
+  const { group_id, created_by, voting_end_time } = body;
 
-  if (!group_id || !created_by) {
-    return new Response(JSON.stringify({ error: 'Missing group_name or created_by' }), { status: 400 });
+  if (!group_id || !created_by || !voting_end_time) {
+    return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
   }
 
   const { error: groupError } = await supabase
     .from('groups')
-    .insert([{ group_id: group_id, is_finished: false }]);
+    .insert([{ 
+      group_id: group_id, 
+      is_finished: false,
+      voting_end_time: voting_end_time 
+    }]);
 
   if (groupError) {
     return new Response(JSON.stringify({ error: groupError.message }), { status: 400 });
