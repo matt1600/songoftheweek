@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
 
   const { data, error } = await supabase
     .from('group_members')
-    .select('user_name, is_owner')
+    .select('user_name, is_owner, phone_number')
     .ilike('group_id', group_id);
 
   if (error) {
@@ -35,15 +35,26 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { user_name } = body;
+  const { user_name, phone_number } = body;
 
-  if (!user_name) {
-    return new Response(JSON.stringify({ error: 'Missing user_name in request body' }), { status: 400 });
+  if (!user_name || !phone_number) {
+    return new Response(JSON.stringify({ error: 'Missing user_name or phone_number in request body' }), { status: 400 });
+  }
+
+  // Validate phone number format (basic validation)
+  const phoneRegex = /^\+?[\d\s-]{10,}$/;
+  if (!phoneRegex.test(phone_number)) {
+    return new Response(JSON.stringify({ error: 'Invalid phone number format' }), { status: 400 });
   }
 
   const { data, error } = await supabase
     .from('group_members')
-    .upsert([{ group_id, user_name }], {
+    .upsert([{ 
+      group_id, 
+      user_name,
+      phone_number,
+      is_owner: false 
+    }], {
       onConflict: 'group_id, user_name',
       ignoreDuplicates: true
     });

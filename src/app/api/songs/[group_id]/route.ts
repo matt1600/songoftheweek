@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
 
   const { data, error } = await supabase
     .from('songs')
-    .select('song_url')
+    .select('song_url, submitting_user, submitted_at')
     .ilike('group_id', group_id);
 
   if (error) {
@@ -41,9 +41,36 @@ export async function POST(request: NextRequest) {
     return new Response(JSON.stringify({ error: 'Missing submitting_user or song_url in request body' }), { status: 400 });
   }
 
+  // Check if the group is still accepting submissions
+  const { data: groupData, error: groupError } = await supabase
+    .from('groups')
+    .select('start_time')
+    .eq('group_id', group_id)
+    .single();
+
+  if (groupError) {
+    return new Response(JSON.stringify({ error: 'Failed to fetch group data' }), { status: 400 });
+  }
+
+  const startTime = new Date(groupData.start_time);
+  const currentTime = new Date();
+  const timeDiff = currentTime.getTime() - startTime.getTime();
+  const hoursDiff = timeDiff / (1000 * 60 * 60);
+
+  if (hoursDiff >= 1) {
+    return new Response(JSON.stringify({ error: 'Submission time has expired' }), { status: 400 });
+  }
+
+  const submitted_at = new Date().toISOString();
+
   const { data, error } = await supabase
     .from('songs')
-    .insert([{ group_id, submitting_user, song_url }]);
+    .insert([{ 
+      group_id, 
+      submitting_user, 
+      song_url,
+      submitted_at 
+    }]);
 
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 400 });

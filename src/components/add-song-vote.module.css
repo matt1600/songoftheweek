@@ -16,6 +16,14 @@
     text-align: center;
   }
   
+  .timer {
+    font-size: 1.2em;
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--accent-color);
+    font-weight: bold;
+  }
+  
   .inputContainer {
     display: flex;
     gap: 10px;
@@ -52,15 +60,22 @@
   }
   
   .listItem {
-    padding: 10px 0;
+    padding: 15px 0;
     border-bottom: 1px solid var(--border-color);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 10px;
   }
   
   .listItem:last-child {
     border-bottom: none;
+  }
+  
+  .songInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
   }
   
   .songLink {

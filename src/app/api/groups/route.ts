@@ -9,9 +9,15 @@ export async function POST(request: NextRequest) {
     return new Response(JSON.stringify({ error: 'Missing group_name or created_by' }), { status: 400 });
   }
 
+  const start_time = new Date().toISOString();
+
   const { error: groupError } = await supabase
     .from('groups')
-    .insert([{ group_id: group_id, is_finished: false }]);
+    .insert([{ 
+      group_id: group_id, 
+      is_finished: false,
+      start_time: start_time
+    }]);
 
   if (groupError) {
     return new Response(JSON.stringify({ error: groupError.message }), { status: 400 });
@@ -25,5 +31,5 @@ export async function POST(request: NextRequest) {
     return new Response(JSON.stringify({ error: memberError.message }), { status: 400 });
   }
 
-  return new Response(JSON.stringify({ group_id: group_id }), { status: 201 });
+  return new Response(JSON.stringify({ group_id: group_id, start_time: start_time }), { status: 201 });
 }

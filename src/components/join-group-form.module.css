@@ -1,0 +1,82 @@
+.container {
+  background-color: var(--background);
+  color: var(--foreground);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  margin-top: 20px;
+  width: 80%;
+  max-width: 600px;
+}
+
+.heading {
+  font-size: 1.8em;
+  margin-bottom: 15px;
+  color: var(--primary-color);
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.label {
+  font-size: 1.1em;
+  color: var(--foreground);
+}
+
+.input {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 1em;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.helpText {
+  font-size: 0.85em;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.error {
+  color: #dc3545;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.submitButton {
+  padding: 12px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1em;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.submitButton:hover {
+  background-color: var(--primary-color-dark);
+}
+
+.submitButton:disabled {
+  background-color: var(--border-color);
+  cursor: not-allowed;
+} 
