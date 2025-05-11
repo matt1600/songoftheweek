@@ -102,39 +102,49 @@ export default function GroupClientComponent({ groupId }: Props) {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.heading}>Welcome to {groupId}</h1>
-      <div className={styles.actionsContainer}>
-        <AddSongVoteComponent />
-      </div>
-      <GroupAdminButton />
-
-      {/* Share Link Section */}
-      <div className={styles.shareContainer}>
-        <p>Invite a friend to join this group:</p>
-        <div className={styles.shareLinkBox}>
-          <input
-            type="text"
-            readOnly
-            value={shareUrl}
-            className={styles.shareInput}
-          />
-          <button onClick={handleCopy} className={styles.shareButton}>
-            {copied ? 'Copied!' : 'Copy Link'}
+      <div className={styles.contentWrapper}>
+        <div className={styles.homeButtonContainer}>
+          <button onClick={() => router.push('/')} className={styles.homeButton}>
+            Home
           </button>
         </div>
+        <h1 className={styles.heading}>Song of the Week 🎵</h1>
+        <div className={styles.groupBadge}>{groupId}</div>
+  
+        <div className={styles.actionsContainer}>
+          <AddSongVoteComponent />
+        </div>
+  
+        <GroupAdminButton />
+  
+        <div className={styles.shareContainer}>
+          <p>Invite a friend to join this group:</p>
+          <div className={styles.shareLinkBox}>
+            <input
+              type="text"
+              readOnly
+              value={shareUrl}
+              className={styles.shareInput}
+            />
+            <button onClick={handleCopy} className={styles.shareButton}>
+              {copied ? 'Copied!' : 'Copy Link'}
+            </button>
+          </div>
+        </div>
+  
+        <section className={styles.membersSection}>
+          <h2 className={styles.membersHeading}>Group Members:</h2>
+          {members.length > 0 ? (
+            <ul className={styles.membersList}>
+              {members.map((member, index) => (
+                <li key={index} className={styles.memberItem}>{member.user_name}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className={styles.noMembers}>No members found.</p>
+          )}
+        </section>
       </div>
-      <section className={styles.membersSection}>
-        <h2 className={styles.membersHeading}>Group Members:</h2>
-        {members.length > 0 ? (
-          <ul className={styles.membersList}>
-            {members.map((member, index) => (
-              <li key={index} className={styles.memberItem}>{member.user_name}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className={styles.noMembers}>No members found.</p>
-        )}
-      </section>
     </div>
   );
 }

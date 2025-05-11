@@ -101,6 +101,7 @@ const AddSongVoteComponent = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>Songs</h2>
+<<<<<<< HEAD
       <div className={styles.timer}>Time Left: {timeLeft}</div>
       {isSubmissionOpen && (
         <div className={styles.inputContainer}>
@@ -113,10 +114,22 @@ const AddSongVoteComponent = () => {
           <button className={styles.addButton} onClick={addSong}>Add Song</button>
         </div>
       )}
+=======
+      <div className={styles.inputContainer}>
+        <input
+          className={styles.input}
+          value={newSongUrl}
+          onChange={(e) => setNewSongUrl(e.target.value)}
+          placeholder="YouTube URL"
+        />
+        <button className={styles.addButton} onClick={addSong}>Add Song</button>
+      </div>
+>>>>>>> a044c61a9923b5c5cdc8bbf47202365fec548b77
 
       <ul className={styles.songsList}>
         {songs.map(song => (
           <li key={song.song_url} className={styles.listItem}>
+<<<<<<< HEAD
             <YouTubeVideoCard videoUrl={song.song_url}/>
             <div className={styles.songInfo}>
               <span>Submitted by: {song.submitting_user}</span>
@@ -129,6 +142,16 @@ const AddSongVoteComponent = () => {
                  song.submitting_user === username ? 'Your Song' : 'Vote'}
               </button>
             </div>
+=======
+            <YouTubeVideoCard videoUrl={song.song_url} />
+            <button
+              className={styles.voteButton}
+              onClick={() => voteSong(song.song_url)}
+              disabled={votedSongs.includes(song.song_url)}
+            >
+              {votedSongs.includes(song.song_url) ? 'Voted' : 'Vote'}
+            </button>
+>>>>>>> a044c61a9923b5c5cdc8bbf47202365fec548b77
           </li>
         ))}
       </ul>

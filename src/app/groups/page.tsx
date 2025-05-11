@@ -27,18 +27,21 @@ const GroupLandingPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.heading}>Song of the Week</h1>
-      <div className={styles.buttonContainer}>
-        <button className={styles.actionButton} onClick={() => router.push('/groups/create')}>Create Group</button>
-        <button className={styles.actionButton} onClick={() => router.push('/groups/join')}>Join Group</button>
-      </div>
-
-      <h2 className={styles.myGroupsTitle}>My Groups</h2>
-      {myGroups.map(groupId => (
-        <div key={groupId}>
-          <button className={styles.groupButton} onClick={() => router.push(`/groups/${groupId}`)}>{groupId}</button>
+      <div className={styles.contentWrapper}>
+        <h1 className={styles.heading}>Song of the Week 🎵</h1>
+        <div className={styles.buttonContainer}>
+          <button className={styles.actionButton} onClick={() => router.push('/groups/create')}>Create Group</button>
+          <button className={styles.actionButton} onClick={() => router.push('/groups/join')}>Join Group</button>
         </div>
-      ))}
+        <div className={styles.groupContainer}>
+          <h2 className={styles.myGroupsTitle}>My Groups</h2>
+          {myGroups.map(groupId => (
+            <div key={groupId}>
+              <button className={styles.groupButton} onClick={() => router.push(`/groups/${groupId}`)}>{groupId}</button>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

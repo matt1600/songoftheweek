@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import "@/styles/youtube-video-card.css"
 
 type YouTubeVideoCardProps = {
   videoUrl: string;
