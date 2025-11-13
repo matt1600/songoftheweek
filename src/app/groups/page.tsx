@@ -28,7 +28,7 @@ const GroupLandingPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.contentWrapper}>
-        <h1 className={styles.heading}>Song of the Week 🎵</h1>
+        <h1 className={styles.heading}>Song of da Week 🎵</h1>
         <div className={styles.buttonContainer}>
           <button className={styles.actionButton} onClick={() => router.push('/groups/create')}>Create Group</button>
           <button className={styles.actionButton} onClick={() => router.push('/groups/join')}>Join Group</button>
